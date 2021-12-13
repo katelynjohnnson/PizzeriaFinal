@@ -5,10 +5,10 @@
 <p>Pizza: {{ pizza }}</p>
 
 <ul>
-    {% for t in Toppings%}
+    {% for topping in Toppings%}
     <li>
-        <p>{{t.name}}</p>
-        <p>{{t.date_added}}</p>
+        <p>{{topping.name|linebreaks }}</p>
+        <p>{{topping.date_added|date:'M d, H:i'}}</p>
     </li>
     {% empty %}
     <li> There are no toppings for this pizza yet.</li>

@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .forms import PizzaForm
 from .models import Pizza, Toppings
 
 
@@ -18,3 +19,22 @@ def pizza(request, pizza_id):
     comments = pizza.comment_set.order_by('-date_added')
     
     context = {'pizza': pizza, 'toppings': toppings, 'comments': comments}
+    return render(request, 'pizzas/pizza.html', context)
+
+
+def new_pizza(request):
+    if request.method != 'POST':
+        form = PizzaForm()
+
+    else:
+        form = PizzaForm(data=request.POST)
+
+        if form.is_valid():
+            new_pizza = form.save(commit=False)
+            new_pizza.owner = request.user
+            form.save()
+
+            return redirect('pizzas:pizzas')
+
+    context = {'form':form}
+    return render(request, 'pizzas/new_pizza.html', context)
